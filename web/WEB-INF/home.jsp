@@ -13,11 +13,8 @@
     </head>
     <body>
         <h1>Home Page</h1>
-        <form action="home" method="get">
-            Username: <input type="text" name="user">
-            Password: <input type="number" name="pass">
-            <input type="login" value="Log in">
-        </form>
+        <h2>Hello ${username}.</h2>
+        <a href="login?logout">Log out</a>
             
         
     </body>

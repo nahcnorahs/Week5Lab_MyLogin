@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import models.AccountService;
+import models.User;
 
 /**
  *
@@ -22,21 +23,27 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         
         HttpSession session = request.getSession();
-        String logOut = request.getParameter("logOut");
-        String logIn = (String) session.getAttribute("logIn");
+        String username = (String) session.getAttribute("username");
+        String logout = (String) request.getParameter("logout");
         
-        if (logOut != null){
+        if (logout != null){
             session.invalidate();
             request.setAttribute("message", "You have successfully logged out");
-            getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request,response);
+            session = request.getSession();
             
-        } else if (logIn != null){
-            response.sendRedirect("home");
+//        } else if (logout != null){
+//            session = request.getSession();
+//            session.invalidate();
         } else {
-            getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request,response);
+            //getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request,response);
+            response.sendRedirect("home");
+            return;
         }
+        getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request,response);
        
     }
+     
+   
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -44,22 +51,26 @@ public class LoginServlet extends HttpServlet {
         
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        
         AccountService user = new AccountService();
         
        if (username == null || username.equals("") || password == null || password.equals("")){
            request.setAttribute("message", "Invalid. Please enter in a username and password");
-           getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request,response);
+           
        } else if (user != null){
-           request.setAttribute("message", "Invalid");
+           HttpSession session = request.getSession();
+           session.setAttribute("username",username);
            response.sendRedirect("home");
+           return;
            
        } else {
            request.setAttribute("username", username);
            request.setAttribute("password", password);
-           getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request,response);
+           request.setAttribute("message","Invalid Username and Password.");
+          
        }
+       getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request,response);
     }
+     //getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request,response);
 
 
 }
