@@ -24,11 +24,11 @@ public class HomeServlet extends HttpServlet {
         String username = (String)session.getAttribute("username");
         
         if (username!= null){
-            request.setAttribute("username",username);
+            //request.setAttribute("username",username);
             getServletContext().getRequestDispatcher("/WEB-INF/home.jsp").forward(request,response);
         }
         else {
-            response.sendRedirect("login");
+            response.sendRedirect("home");
             return;
             
         }
